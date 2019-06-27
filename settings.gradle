@@ -12,4 +12,4 @@ include ':app', ':apiconnector',
         ':realmhelper',
         ':shapeofview',
         ':axutils_java',
-        ':axutils_android'
+        ':axcore-android'

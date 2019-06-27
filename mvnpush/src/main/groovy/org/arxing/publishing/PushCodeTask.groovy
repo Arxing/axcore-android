@@ -7,7 +7,7 @@ class PushCodeTask extends DefaultTask {
 
     PushCodeTask() {
         group = 'axcore-push'
-        dependsOn CommitCodeTask
+        dependsOn 'commitCode'
     }
 
     @TaskAction

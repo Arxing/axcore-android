@@ -48,8 +48,8 @@
     </dependency>
     <dependency>
       <groupId>org.arxing</groupId>
-      <artifactId>utils</artifactId>
-      <version>1.0.6</version>
+      <artifactId>axcore-android</artifactId>
+      <version>1.0.0</version>
       <scope>compile</scope>
     </dependency>
     <dependency>

@@ -2,7 +2,7 @@ package org.arxing.axmvvm.adapter;
 
 import android.databinding.ObservableList;
 
-import org.arxing.utils.Logger;
+import org.arxing.axutils_android.Logger;
 
 
 public abstract class OnListSimpleCallback<T> extends ObservableList.OnListChangedCallback<ObservableList<T>> implements OnListSimpleListener<T> {

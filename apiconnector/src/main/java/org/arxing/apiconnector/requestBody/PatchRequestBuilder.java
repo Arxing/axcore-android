@@ -4,7 +4,7 @@ import android.annotation.SuppressLint;
 
 import org.arxing.apiconnector.ParamBox;
 import org.arxing.apiconnector.RequestInfo;
-import org.arxing.utils.Logger;
+import org.arxing.axutils_android.Logger;
 
 import okhttp3.Request;
 import okhttp3.RequestBody;

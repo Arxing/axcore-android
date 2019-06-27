@@ -13,7 +13,7 @@ import org.arxing.lazyrecyclerview.HorizontalDividerItemDecoration;
 import org.arxing.lazyrecyclerview.LazyAdapter;
 import org.arxing.lazyrecyclerview.LazyRecyclerView;
 import org.arxing.lazyrecyclerview.protocol.OnLoadMoreListener;
-import org.arxing.utils.UnitParser;
+import org.arxing.axutils_android.UnitParser;
 
 @BindingMethods({
         @BindingMethod(type = LazyRecyclerView.class, attribute = "onLoadMore", method = "setOnLoadMoreListener"),

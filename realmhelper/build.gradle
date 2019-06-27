@@ -39,9 +39,9 @@ android {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
-    api 'org.arxing:utils:1.0.6'
-    api 'io.reactivex.rxjava2:rxjava:2.2.5'
-    api 'com.jakewharton.rxbinding2:rxbinding:2.2.0'
+    implementation 'org.arxing:axcore-android:1.0.0'
+    implementation 'io.reactivex.rxjava2:rxjava:2.2.5'
+    implementation 'com.jakewharton.rxbinding2:rxbinding:2.2.0'
 }
 
 

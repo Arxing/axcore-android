@@ -20,9 +20,9 @@ import org.arxing.apiconnector.requestBody.PatchRequestBuilder;
 import org.arxing.apiconnector.requestBody.PostRequestBuilder;
 import org.arxing.apiconnector.requestBody.PutRequestBuilder;
 import org.arxing.apiconnector.requestBody.RequestBuilder;
-import org.arxing.utils.FileUtil;
-import org.arxing.utils.Logger;
-import org.arxing.utils.ThreadUtil;
+import org.arxing.axutils_android.FileUtils;
+import org.arxing.axutils_android.Logger;
+import org.arxing.axutils_android.ThreadUtil;
 
 import java.io.IOException;
 import java.net.SocketTimeoutException;
@@ -635,7 +635,7 @@ public class ApiConnector {
             requestInfo.endTiming();
             if (enableDebugLog && byteContent.length > 0) {
                 String content = new String(byteContent, "utf-8");
-                FileUtil.write(content, debugLogPath, requestInfo.getTag() + getOutputFileSuffix(requestInfo));
+                FileUtils.write(content, debugLogPath, requestInfo.getTag() + getOutputFileSuffix(requestInfo));
             }
 
             // 選擇一個截斷器執行 注意有順序之分
@@ -660,7 +660,7 @@ public class ApiConnector {
                     logger.d("[%s] 儲存轉換後的請求回應", requestInfo.toString());
                     if (enableDebugLog) {
                         String content = responseBodyInfo.toString();
-                        FileUtil.write(content, debugLogPath, requestInfo.getTag() + ".override" + getOutputFileSuffix(requestInfo));
+                        FileUtils.write(content, debugLogPath, requestInfo.getTag() + ".override" + getOutputFileSuffix(requestInfo));
                     }
                     responseMap.putBody(requestInfo.getTag(), responseBodyInfo);
                 }

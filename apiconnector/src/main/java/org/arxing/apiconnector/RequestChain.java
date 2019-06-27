@@ -5,7 +5,7 @@ import android.util.SparseArray;
 import com.annimon.stream.Collectors;
 import com.annimon.stream.Stream;
 
-import org.arxing.utils.Logger;
+import org.arxing.axutils_android.Logger;
 
 import java.util.ArrayList;
 import java.util.HashMap;

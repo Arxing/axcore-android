@@ -3,9 +3,9 @@ package org.arxing.realmhelper;
 import android.content.Context;
 import android.support.annotation.CheckResult;
 
-import org.arxing.utils.AssertUtils;
-import org.arxing.utils.Logger;
-import org.arxing.utils.function.Consumer;
+import org.arxing.axutils_android.AssertUtils;
+import org.arxing.axutils_android.Logger;
+import org.arxing.axutils_android.function.Consumer;
 
 import java.util.ArrayList;
 import java.util.Date;

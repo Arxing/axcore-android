@@ -3,7 +3,7 @@ package org.arxing.apiconnector.requestBody;
 
 
 import org.arxing.apiconnector.RequestInfo;
-import org.arxing.utils.Logger;
+import org.arxing.axutils_android.Logger;
 
 import okhttp3.Request;
 

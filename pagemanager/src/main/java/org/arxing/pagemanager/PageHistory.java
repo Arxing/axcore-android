@@ -2,8 +2,8 @@ package org.arxing.pagemanager;
 
 import com.annimon.stream.Stream;
 
-import org.arxing.utils.Logger;
-import org.arxing.utils.ThreadUtil;
+import org.arxing.axutils_android.Logger;
+import org.arxing.axutils_android.ThreadUtil;
 
 import java.util.LinkedList;
 import java.util.Objects;

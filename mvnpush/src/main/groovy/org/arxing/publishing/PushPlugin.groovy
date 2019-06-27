@@ -22,9 +22,9 @@ class PushPlugin implements Plugin<Project> {
             buildProperties(project, extension)
 
             project.task([type: PublishToMavenTask], 'publishToMaven')
+            project.task([type: UploadMavenTask], 'uploadMaven')
             project.task([type: CommitCodeTask], 'commitCode')
             project.task([type: PushCodeTask], 'pushCode')
-            project.task([type: UploadMavenTask], 'uploadMaven')
         }
     }
 

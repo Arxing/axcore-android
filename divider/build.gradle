@@ -27,8 +27,8 @@ android {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
-    api 'org.arxing:utils:1.0.6'
-    api 'org.arxing:attrparser:1.0.0'
+    implementation 'org.arxing:axcore-android:1.0.0'
+    implementation 'org.arxing:attrparser:1.0.0'
 }
 
 if (ENABLE_MAVEN) apply plugin: 'mvnpush'

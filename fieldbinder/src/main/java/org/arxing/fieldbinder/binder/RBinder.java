@@ -3,7 +3,7 @@ package org.arxing.fieldbinder.binder;
 import android.content.Context;
 
 import org.arxing.fieldbinder.FieldBinder;
-import org.arxing.utils.AssertUtils;
+import org.arxing.axutils_android.AssertUtils;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

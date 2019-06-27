@@ -7,7 +7,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import org.arxing.lazyrecyclerview.protocol.LoadMoreNotifier;
-import org.arxing.utils.Logger;
+import org.arxing.axutils_android.Logger;
 
 
 public abstract class LazyAdapter extends GlobalHeaderFooterSectioningAdapter {

@@ -8,8 +8,8 @@ import org.arxing.fieldbinder.binder.ColorBinder;
 import org.arxing.fieldbinder.binder.NameBinder;
 import org.arxing.fieldbinder.binder.RBinder;
 import org.arxing.fieldbinder.binder.StringBinder;
-import org.arxing.utils.AssertUtils;
-import org.arxing.utils.Logger;
+import org.arxing.axutils_android.AssertUtils;
+import org.arxing.axutils_android.Logger;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;

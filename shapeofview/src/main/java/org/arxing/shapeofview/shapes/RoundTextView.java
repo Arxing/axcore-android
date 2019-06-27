@@ -15,7 +15,7 @@ import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import org.arxing.shapeofview.R;
-import org.arxing.utils.UnitParser;
+import org.arxing.axutils_android.UnitParser;
 
 public class RoundTextView extends RoundRectView {
     private TextView textView;

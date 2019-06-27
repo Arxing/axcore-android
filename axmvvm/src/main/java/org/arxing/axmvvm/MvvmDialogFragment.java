@@ -13,7 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import org.arxing.utils.Logger;
+import org.arxing.axutils_android.Logger;
 
 public abstract class MvvmDialogFragment<TBinding extends ViewDataBinding, TViewModel extends ViewModel<TBinding>> extends DialogFragment implements ViewModelHelper {
     protected TBinding binding;

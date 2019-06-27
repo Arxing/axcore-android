@@ -23,7 +23,7 @@ allprojects {
     repositories {
         google()
         jcenter()
-        maven { url 'https://raw.githubusercontent.com/arxing/AxCore/master' }
+        maven { url 'https://raw.githubusercontent.com/arxing/axcore-android/master/mvn-repositories' }
     }
 }
 

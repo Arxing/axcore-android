@@ -3,7 +3,7 @@ package org.arxing.apiconnector;
 import com.google.gson.TypeAdapterFactory;
 
 import org.arxing.apiconnector.interceptor.RequestInterceptor;
-import org.arxing.utils.AssertUtils;
+import org.arxing.axutils_android.AssertUtils;
 
 import java.util.ArrayList;
 import java.util.HashMap;

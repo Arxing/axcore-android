@@ -9,7 +9,7 @@ import android.util.AttributeSet;
 import android.view.View;
 
 import org.arxing.attrparser.AttrParser;
-import org.arxing.utils.UnitParser;
+import org.arxing.axutils_android.UnitParser;
 
 
 /**

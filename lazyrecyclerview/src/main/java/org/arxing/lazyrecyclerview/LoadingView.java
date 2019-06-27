@@ -13,7 +13,7 @@ import android.support.annotation.Px;
 import android.util.AttributeSet;
 import android.view.View;
 
-import org.arxing.utils.UnitParser;
+import org.arxing.axutils_android.UnitParser;
 
 
 class LoadingView extends LVBase {

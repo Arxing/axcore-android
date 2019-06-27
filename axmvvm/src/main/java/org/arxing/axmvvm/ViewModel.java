@@ -3,7 +3,7 @@ package org.arxing.axmvvm;
 import android.content.Context;
 import android.databinding.ViewDataBinding;
 
-import org.arxing.utils.Logger;
+import org.arxing.axutils_android.Logger;
 
 import java.util.HashMap;
 import java.util.Map;

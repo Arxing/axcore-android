@@ -25,9 +25,9 @@ import android.widget.TextView;
 
 import org.arxing.lazyrecyclerview.protocol.LazyStatus;
 import org.arxing.lazyrecyclerview.protocol.OnLoadMoreListener;
-import org.arxing.utils.AssertUtils;
-import org.arxing.utils.ThreadUtil;
-import org.arxing.utils.UnitParser;
+import org.arxing.axutils_android.AssertUtils;
+import org.arxing.axutils_android.ThreadUtil;
+import org.arxing.axutils_android.UnitParser;
 
 
 public class LazyRecyclerView extends BaseWidgetView implements LazyStatus {

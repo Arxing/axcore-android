@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>org.arxing</groupId>
+  <artifactId>awesome-text-view</artifactId>
+  <version>1.0.0</version>
+  <packaging>aar</packaging>
+  <name>awesome-text-view</name>
+  <description></description>
+  <url></url>
+  <licenses>
+    <license>
+      <name></name>
+      <url></url>
+      <distribution></distribution>
+    </license>
+  </licenses>
+  <developers>
+    <developer>
+      <id>arxing</id>
+      <name>Arxing</name>
+    </developer>
+  </developers>
+  <scm>
+    <connection></connection>
+    <developerConnection></developerConnection>
+    <url></url>
+  </scm>
+  <dependencies>
+    <dependency>
+      <groupId>com.android.support</groupId>
+      <artifactId>appcompat-v7</artifactId>
+      <version>28.0.0</version>
+      <scope>compile</scope>
+    </dependency>
+  </dependencies>
+</project>

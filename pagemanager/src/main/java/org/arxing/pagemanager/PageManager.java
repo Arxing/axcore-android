@@ -12,7 +12,7 @@ import android.view.animation.AnimationUtils;
 import org.arxing.apiconnector.ResponseBodyInfo;
 import org.arxing.apiconnector.ResponseMap;
 import org.arxing.pagemanager.protocol.IPageFragment;
-import org.arxing.utils.Logger;
+import org.arxing.axutils_android.Logger;
 
 import java.util.HashMap;
 import java.util.Map;

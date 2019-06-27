@@ -4,7 +4,7 @@ import android.util.Pair;
 
 import com.annimon.stream.Stream;
 
-import org.arxing.utils.AssertUtils;
+import org.arxing.axutils_android.AssertUtils;
 
 import java.util.ArrayList;
 import java.util.Collections;

@@ -3,7 +3,7 @@ package org.arxing.apiconnector;
 
 import org.arxing.apiconnector.interceptor.RequestInterceptor;
 import org.arxing.jparser.JParser;
-import org.arxing.utils.Logger;
+import org.arxing.axutils_android.Logger;
 
 public class JsonResponseBodyParser implements ResponseBodyParser {
     private Logger logger = new Logger("ApiConnector");

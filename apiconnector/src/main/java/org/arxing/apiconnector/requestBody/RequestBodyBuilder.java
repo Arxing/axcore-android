@@ -8,7 +8,7 @@ import org.arxing.apiconnector.MultipartRequestBody;
 import org.arxing.apiconnector.ParamBox;
 import org.arxing.apiconnector.RawRequestBody;
 import org.arxing.apiconnector.RequestInfo;
-import org.arxing.utils.Logger;
+import org.arxing.axutils_android.Logger;
 
 import java.io.File;
 

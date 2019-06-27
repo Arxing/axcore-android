@@ -20,8 +20,8 @@ import org.arxing.lazyrecyclerview.LazyAdapter;
 import org.arxing.lazyrecyclerview.LazyFooterViewHolder;
 import org.arxing.lazyrecyclerview.LazyHeaderViewHolder;
 import org.arxing.lazyrecyclerview.LazyItemViewHolder;
-import org.arxing.utils.Logger;
-import org.arxing.utils.ThreadUtil;
+import org.arxing.axutils_android.Logger;
+import org.arxing.axutils_android.ThreadUtil;
 
 
 /**
