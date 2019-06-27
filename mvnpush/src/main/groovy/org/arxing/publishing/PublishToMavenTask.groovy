@@ -2,10 +2,10 @@ package org.arxing.publishing
 
 import org.gradle.api.DefaultTask
 
-class PushLocalTask extends DefaultTask {
+class PublishToMavenTask extends DefaultTask {
 
-    PushLocalTask() {
-        group = 'axcore-android-push'
+    PublishToMavenTask() {
+        group = 'axcore-push'
         dependsOn 'uploadArchives'
     }
 }
