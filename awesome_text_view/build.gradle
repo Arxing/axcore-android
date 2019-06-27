@@ -51,5 +51,6 @@ if (plugins.hasPlugin('mvnpush')) {
         POM_DEVELOPER_NAME = "Arxing"
         REPOSITORY_URL = ""
         REPOSITORY_URL_RELATIVE = "mvn-repositories"
+        COMMIT_MESSAGE = ""
     }
 }
