@@ -79,7 +79,7 @@ public class XField<T> {
         return this;
     }
 
-    public T value() {
-        return value;
+    public Optional<T> value() {
+        return Optional.of(value);
     }
 }
