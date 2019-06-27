@@ -5,16 +5,24 @@ import org.gradle.api.Plugin
 import org.gradle.api.Project
 
 class PushPlugin implements Plugin<Project> {
+    public static boolean showProperties
+
+    static boolean showProperties(Project project) {
+        return project.extensions.hasProperty('SHOW_PROPERTIES') && project.extensions.properties['SHOW_PROPERTIES']
+    }
 
     @Override
     void apply(Project project) {
         PushExtension extension = project.extensions.create('push', PushExtension)
         project.apply from: "${new File(project.rootDir, "mvn-push.gradle").toString()}"
         project.afterEvaluate {
-            printExt(project.push)
+            showProperties = showProperties(project)
+            if (showProperties)
+                printExt(project.push)
             buildProperties(project, extension)
 
-            project.task([type: PushLocalTask], 'pushLocal')
+            project.task([type: PublishToMavenTask], 'publishToMaven')
+            project.task([type: SyncModuleCodeTask], 'syncCode')
         }
     }
 

@@ -30,7 +30,7 @@ dependencies {
     api 'com.android.support:appcompat-v7:28.0.0'
 }
 
-apply plugin: 'mvnpush'
+if (ENABLE_MAVEN) apply plugin: 'mvnpush'
 if (plugins.hasPlugin('mvnpush')) {
     push {
         POM_NAME = "awesome-text-view"

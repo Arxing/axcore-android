@@ -28,6 +28,7 @@ class PropertiesHelper {
         bw.write(content)
         bw.flush()
         bw.close()
-        println "===> save gradle.properties at ${file.toString()}"
+        if (PushPlugin.showProperties)
+            println "===> save gradle.properties at ${file.toString()}"
     }
 }

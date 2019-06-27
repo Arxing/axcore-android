@@ -33,7 +33,7 @@ dependencies {
     api 'org.arxing:utils:1.0.6'
 }
 
-apply plugin: 'mvnpush'
+if (ENABLE_MAVEN) apply plugin: 'mvnpush'
 if (plugins.hasPlugin('mvnpush')) {
     push {
         POM_NAME = "shapeofview"

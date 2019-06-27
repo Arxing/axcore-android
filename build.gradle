@@ -1,6 +1,7 @@
-import java.util.stream.Stream
-
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
+
+ext.ENABLE_MAVEN = true
+ext.SHOW_PROPERTIES = false
 
 buildscript {
     repositories {
@@ -31,9 +32,13 @@ task clean(type: Delete) {
 
 project.subprojects { sub ->
     sub.afterEvaluate { it ->
+        it.plugins
+
         if (sub.plugins.hasPlugin('com.android.library') || sub.plugins.hasPlugin('java-library')) {
-            println "║"
-            println "${String.format("╚%150s", "=").replace(' ', '=')}> See ${it.name}"
+            if (SHOW_PROPERTIES) {
+                println "║"
+                println "${String.format("╚%150s", "=").replace(' ', '=')}> See ${it.name}"
+            }
             it.tasks.withType(JavaCompile) {
                 options.encoding = 'UTF-8'
             }

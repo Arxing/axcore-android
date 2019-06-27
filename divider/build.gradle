@@ -31,7 +31,7 @@ dependencies {
     api 'org.arxing:attrparser:1.0.0'
 }
 
-apply plugin: 'mvnpush'
+if (ENABLE_MAVEN) apply plugin: 'mvnpush'
 if (plugins.hasPlugin('mvnpush')) {
     push {
         POM_NAME = "divider"

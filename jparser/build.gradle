@@ -9,7 +9,7 @@ sourceCompatibility = "1.8"
 targetCompatibility = "1.8"
 
 
-apply plugin: 'mvnpush'
+if (ENABLE_MAVEN) apply plugin: 'mvnpush'
 if (plugins.hasPlugin('mvnpush')) {
     push {
         POM_NAME = "jparser"
