@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="AwesomeTextView">
+        <attr name="awesomeType" format="enum">
+            <enum name="solid" value="1"/>
+            <enum name="regular" value="2"/>
+            <enum name="brands" value="3"/>
+        </attr>
+    </declare-styleable>
+</resources>

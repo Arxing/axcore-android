@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+             xmlns:app="http://schemas.android.com/apk/res-auto"
+             android:layout_width="match_parent"
+             android:layout_height="40dp"
+             android:gravity="center"
+             android:orientation="horizontal"
+    >
+
+    <LinearLayout
+        android:id="@+id/entryCore_loadingLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:visibility="gone"
+        >
+
+        <TextView
+            android:id="@+id/entryCore_loading_textView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="加載數據中..."
+            />
+
+        <org.arxing.lazyrecyclerview.LoadingView
+            android:id="@+id/entryCore_loading_loadingView"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginStart="15dp"
+            app:strokeWidth="5dp"
+            />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/entryCore_loadFailedLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:visibility="gone"
+        >
+
+        <TextView
+            android:id="@+id/entryCore_loadFailed_textView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="加載失敗 點擊重試..."
+            />
+
+        <org.arxing.lazyrecyclerview.LoadingView
+            android:id="@+id/entryCore_loadFailed_loadingView"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginStart="15dp"
+            android:visibility="invisible"
+            app:strokeWidth="5dp"
+            />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/entryCore_exhaustedLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:visibility="gone"
+        >
+
+        <TextView
+            android:id="@+id/entryCore_exhausted_textView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="沒有資料了"
+            />
+
+    </LinearLayout>
+
+</FrameLayout>

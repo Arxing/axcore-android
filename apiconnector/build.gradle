@@ -1,0 +1,59 @@
+apply plugin: 'com.android.library'
+
+android {
+    compileSdkVersion 28
+
+
+
+    defaultConfig {
+        minSdkVersion 21
+        targetSdkVersion 28
+        versionCode 1
+        versionName "1.0"
+
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+
+    api 'com.annimon:stream:1.2.1'
+    api 'com.squareup.okhttp3:okhttp:3.12.0'
+    api 'io.reactivex.rxjava2:rxjava:2.2.5'
+    api 'org.arxing:utils:1.0.6'
+    api 'org.arxing:jparser:1.0.0'
+}
+
+apply plugin: 'mvnpush'
+if (plugins.hasPlugin('mvnpush')) {
+    push {
+        POM_NAME = "apiconnector"
+        POM_ARTIFACT_ID = "apiconnector"
+        POM_PACKAGING = "aar"
+        VERSION_NAME = "1.0.0"
+        VERSION_CODE = "1"
+        GROUP = "org.arxing"
+        POM_DESCRIPTION = ""
+        POM_URL = ""
+        POM_SCM_URL = ""
+        POM_SCM_CONNECTION = ""
+        POM_SCM_DEV_CONNECTION = ""
+        POM_LICENCE_NAME = ""
+        POM_LICENCE_URL = ""
+        POM_LICENCE_DIST = ""
+        POM_DEVELOPER_ID = "arxing"
+        POM_DEVELOPER_NAME = "Arxing"
+        REPOSITORY_URL = ""
+        REPOSITORY_URL_RELATIVE = "mvn-repositories"
+    }
+}

@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="LazyRecyclerView">
+        <!--開關類屬性-->
+
+        <!--啟用刷新-->
+        <attr name="refreshEnabled" format="boolean"/>
+        <!--啟用加載更多-->
+        <attr name="loadMoreEnabled" format="boolean"/>
+        <!--啟用無資料時的提示-->
+        <attr name="emptyPromptShowingEnabled" format="boolean"/>
+        <!--啟用加載失敗時的提示-->
+        <attr name="errorPromptShowingEnabled" format="boolean"/>
+        <!--啟用巢狀滑動-->
+        <attr name="nestedScrollingEnabled" format="boolean"/>
+
+
+        <!--資料屬性-->
+        <attr name="emptyPromptMode" format="enum">
+            <enum name="text" value="0"/>
+            <enum name="view" value="1"/>
+            <enum name="drawable" value="2"/>
+        </attr>
+
+        <attr name="errorPromptMode" format="enum">
+            <enum name="text" value="0"/>
+            <enum name="view" value="1"/>
+            <enum name="drawable" value="2"/>
+        </attr>
+
+        <!--無資料時的提示字串-->
+        <attr name="emptyPromptText" format="string"/>
+        <!--無資料時提示字串的顯示Style-->
+        <attr name="emptyPromptAppearance" format="reference"/>
+        <!--無資料時的提示View-->
+        <attr name="emptyPromptView" format="reference"/>
+        <!--無資料時的提示Drawable-->
+        <attr name="emptyPromptDrawable" format="reference"/>
+
+        <!--加載失敗時的提示字串-->
+        <attr name="errorPromptText" format="string"/>
+        <!--加載失敗時提示字串的顯示Style-->
+        <attr name="errorPromptAppearance" format="reference"/>
+        <!--加載失敗時的提示View-->
+        <attr name="errorPromptView" format="reference"/>
+        <!--加載失敗時的提示Drawable-->
+        <attr name="errorPromptDrawable" format="reference"/>
+
+        <attr name="loadingMorePromptText" format="string"/>
+        <attr name="loadExhaustedPromptText" format="string"/>
+        <attr name="loadFailedPromptText" format="string"/>
+
+
+        <attr name="loadingViewStartColor" format="color"/>
+        <attr name="loadingViewEndColor" format="color"/>
+        <attr name="loadingViewStrokeWidth" format="dimension"/>
+        <attr name="loadingViewSize" format="dimension"/>
+    </declare-styleable>
+
+    <declare-styleable name="LoadingView">
+        <attr name="startColor" format="color"/>
+        <attr name="endColor" format="color"/>
+        <attr name="strokeWidth" format="dimension"/>
+    </declare-styleable>
+</resources>

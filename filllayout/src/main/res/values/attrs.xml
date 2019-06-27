@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="FillLayout">
+        <attr name="fl_rowCount" format="integer"/>
+        <attr name="fl_columnCount" format="integer"/>
+        <attr name="fl_space_vertical" format="dimension"/>
+        <attr name="fl_space_horizontal" format="dimension"/>
+        <attr name="fl_fillMode"/>
+    </declare-styleable>
+
+    <declare-styleable name="FillLayout_Layout">
+        <attr name="fl_fillMode"/>
+        <attr name="android:gravity"/>
+    </declare-styleable>
+</resources>

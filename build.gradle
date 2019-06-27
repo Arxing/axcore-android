@@ -1,0 +1,55 @@
+import java.util.stream.Stream
+
+// Top-level build file where you can add configuration options common to all sub-projects/modules.
+
+buildscript {
+    repositories {
+        google()
+        jcenter()
+        maven { url new File(project.rootDir, "mvn-repositories").toString() }
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:3.3.2'
+
+        // NOTE: Do not place your application dependencies here; they belong
+        // in the individual module build.gradle files
+        classpath 'org.arxing:mvnpush:1.0.0'
+    }
+}
+
+allprojects {
+    repositories {
+        google()
+        jcenter()
+        maven { url 'https://raw.githubusercontent.com/arxing/AxCore/master' }
+    }
+}
+
+task clean(type: Delete) {
+    delete rootProject.buildDir
+}
+
+project.subprojects { sub ->
+    sub.afterEvaluate { it ->
+        if (sub.plugins.hasPlugin('com.android.library') || sub.plugins.hasPlugin('java-library')) {
+            println "║"
+            println "${String.format("╚%150s", "=").replace(' ', '=')}> See ${it.name}"
+            it.tasks.withType(JavaCompile) {
+                options.encoding = 'UTF-8'
+            }
+            it.tasks.withType(Javadoc) {
+                excludes = ['**/*.java']
+                excludes = ['**/*.kotlin']
+                options.addStringOption('Xdoclint:none', '-quiet')
+                options.addStringOption('encoding', 'UTF-8')
+                options.addStringOption('charSet', 'UTF-8')
+            }
+            if (sub.plugins.hasPlugin('com.android.library')) {
+                it.android.compileOptions {
+                    sourceCompatibility JavaVersion.VERSION_1_8
+                    targetCompatibility JavaVersion.VERSION_1_8
+                }
+            }
+        }
+    }
+}
