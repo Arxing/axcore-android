@@ -1,9 +1,10 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 
-ext.ENABLE_MAVEN = true
-ext.SHOW_PROPERTIES = false
 
 buildscript {
+    ext.ENABLE_MAVEN = true
+    ext.SHOW_PROPERTIES = false
+
     repositories {
         google()
         jcenter()
@@ -14,7 +15,7 @@ buildscript {
 
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
-        classpath 'org.arxing:mvnpush:1.0.0'
+        if (ENABLE_MAVEN) classpath 'org.arxing:mvnpush:1.0.0'
     }
 }
 
