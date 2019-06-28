@@ -35,7 +35,7 @@ dependencies {
     implementation 'com.jakewharton.rxbinding2:rxbinding:2.2.0'
     implementation 'com.annimon:stream:1.2.1'
 
-    implementation 'org.arxing:axcore-android:1.0.0'
+    implementation 'org.arxing:axcore-android:1.0.1'
     implementation 'org.arxing:lazyrecyclerview:1.0.0'
     implementation 'org.arxing:shapeofview:1.0.0'
     implementation 'org.arxing:pagemanager:1.0.0'
@@ -47,7 +47,7 @@ if (plugins.hasPlugin('mvnpush')) {
         POM_NAME = "axmvvm"
         POM_ARTIFACT_ID = "axmvvm"
         POM_PACKAGING = "aar"
-        VERSION_NAME = "1.0.0"
+        VERSION_NAME = "1.0.1"
         VERSION_CODE = "1"
         GROUP = "org.arxing"
         POM_DESCRIPTION = ""
@@ -62,6 +62,6 @@ if (plugins.hasPlugin('mvnpush')) {
         POM_DEVELOPER_NAME = "Arxing"
         REPOSITORY_URL = ""
         REPOSITORY_URL_RELATIVE = "mvn-repositories"
-        COMMIT_MESSAGE = ""
+        COMMIT_MESSAGE = "公開MvvmAdapter"
     }
 }

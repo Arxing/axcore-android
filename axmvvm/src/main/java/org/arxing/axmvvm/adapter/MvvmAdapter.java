@@ -27,7 +27,7 @@ import org.arxing.axutils_android.ThreadUtil;
 /**
  * MVVM adapter的原型
  */
-class MvvmAdapter extends LazyAdapter implements ViewModelHelper {
+public class MvvmAdapter extends LazyAdapter implements ViewModelHelper {
     protected Logger logger = Logger.defLogger;
     public ViewModelHelper helper;
 
