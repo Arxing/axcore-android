@@ -26,6 +26,7 @@ android {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation 'com.google.code.gson:gson:2.8.5'
 }
 
 if (ENABLE_MAVEN) apply plugin: 'mvnpush'
@@ -34,7 +35,7 @@ if (plugins.hasPlugin('mvnpush')) {
         POM_NAME = "axcore-android"
         POM_ARTIFACT_ID = "axcore-android"
         POM_PACKAGING = "aar"
-        VERSION_NAME = "1.0.1"
+        VERSION_NAME = "1.0.2"
         VERSION_CODE = "1"
         GROUP = "org.arxing"
         POM_DESCRIPTION = ""
@@ -49,6 +50,6 @@ if (plugins.hasPlugin('mvnpush')) {
         POM_DEVELOPER_NAME = "Arxing"
         REPOSITORY_URL = ""
         REPOSITORY_URL_RELATIVE = "mvn-repositories"
-        COMMIT_MESSAGE = "修改XField.value()"
+        COMMIT_MESSAGE = "新增PrinterUtils"
     }
 }
