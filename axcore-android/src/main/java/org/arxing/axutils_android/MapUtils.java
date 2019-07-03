@@ -25,6 +25,10 @@ public class MapUtils {
         return new SimpleMap<>();
     }
 
+    public static SimpleMap<String, String> newParameterMap() {
+        return new ParameterMap();
+    }
+
     public static <TK, TV> SimpleMap of(Map<TK, TV> map) {
         SimpleMap<TK, TV> result = new SimpleMap<>();
         result.putAll(map);
@@ -46,5 +50,14 @@ public class MapUtils {
         public <T> T getTo(TKey key) {
             return (T) super.get(key);
         }
+    }
+
+    public static class ParameterMap extends SimpleMap<String, String> {
+
+        public ParameterMap addAutoTrans(String key, Object value) {
+            add(key, PrinterUtils.parseParamVal(value));
+            return this;
+        }
+
     }
 }

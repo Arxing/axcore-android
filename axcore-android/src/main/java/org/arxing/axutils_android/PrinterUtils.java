@@ -56,7 +56,7 @@ public class PrinterUtils {
             String json = gson.toJson(paramVal);
             String clsInfo = paramVal.getClass().getName();
             return clsInfo + ":" + json;
-        } catch (Exception e) {
+        } catch (Throwable e) {
             return paramVal.toString();
         }
     }
