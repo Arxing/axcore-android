@@ -39,7 +39,7 @@ android {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
-    implementation 'org.arxing:axcore-android:1.0.0'
+    implementation 'org.arxing:axcore-android:1.0.5'
     implementation 'io.reactivex.rxjava2:rxjava:2.2.5'
     implementation 'com.jakewharton.rxbinding2:rxbinding:2.2.0'
 }
@@ -51,7 +51,7 @@ if (plugins.hasPlugin('mvnpush')) {
         POM_NAME = "realmhelper"
         POM_ARTIFACT_ID = "realmhelper"
         POM_PACKAGING = "aar"
-        VERSION_NAME = "1.0.0"
+        VERSION_NAME = "1.0.1"
         VERSION_CODE = "1"
         GROUP = "org.arxing"
         POM_DESCRIPTION = ""

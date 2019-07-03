@@ -67,8 +67,12 @@ public class RealmHelper {
         }
     }
 
+    public Transaction beginTransaction(String tag) {
+        return new Transaction(tag);
+    }
+
     public Transaction beginTransaction() {
-        return new Transaction();
+        return beginTransaction(null);
     }
 
     public void execute(Realm.Transaction transaction) {
@@ -87,10 +91,10 @@ public class RealmHelper {
 
     public class Transaction {
 
-        Transaction() {
+        Transaction(String tag) {
             updateRealm();
             if (realm.isInTransaction()) {
-                logger.w("Realm未提交 將強制關閉此次交易");
+                logger.w("Realm未提交(tag=%s) 將強制關閉此次交易", tag);
                 realm.cancelTransaction();
             }
             realm.beginTransaction();
