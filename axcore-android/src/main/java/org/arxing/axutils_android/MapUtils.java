@@ -25,7 +25,7 @@ public class MapUtils {
         return new SimpleMap<>();
     }
 
-    public static SimpleMap<String, String> newParameterMap() {
+    public static ParameterMap newParameterMap() {
         return new ParameterMap();
     }
 
