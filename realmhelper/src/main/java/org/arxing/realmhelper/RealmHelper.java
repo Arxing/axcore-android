@@ -26,6 +26,7 @@ public class RealmHelper {
     private static boolean initialied;
     private Realm realm;
     private Map<String, Realm> cacheRealms = new ConcurrentHashMap<>();
+    private OnTransactionListener listener;
 
     public static RealmHelper getInstance() {
         if (instance == null) {
@@ -67,6 +68,10 @@ public class RealmHelper {
         }
     }
 
+    public void setListener(OnTransactionListener listener) {
+        this.listener = listener;
+    }
+
     public Transaction beginTransaction(String tag) {
         return new Transaction(tag);
     }
@@ -85,23 +90,51 @@ public class RealmHelper {
         realm.executeTransactionAsync(transaction, success, error);
     }
 
-    private void commitInternal() {
+    private void commitInternal(Transaction transaction) {
+        if (listener != null)
+            listener.onTransactionCommit(transaction);
         realm.commitTransaction();
     }
 
+    private void cancelInternal(Transaction transaction) {
+        if (listener != null)
+            listener.onTransactionCancel(transaction);
+        realm.cancelTransaction();
+    }
+
     public class Transaction {
+        private String tag;
 
         Transaction(String tag) {
+            this.tag = tag;
             updateRealm();
             if (realm.isInTransaction()) {
-                logger.w("Realm未提交(tag=%s) 將強制關閉此次交易", tag);
-                realm.cancelTransaction();
+                logger.w("You cannot begin a transaction(%s) without committing!!!", tag);
+                if (listener != null)
+                    listener.onError(this);
+                else {
+                    cancelInternal(this);
+                }
             }
+            if (listener != null)
+                listener.onTransactionBegin(this);
             realm.beginTransaction();
         }
 
+        public String getThreadName() {
+            return Thread.currentThread().getName();
+        }
+
+        public String getTag() {
+            return tag;
+        }
+
         public void commit() {
-            commitInternal();
+            commitInternal(this);
+        }
+
+        public void cancel() {
+            cancelInternal(this);
         }
 
         @CheckResult public <T extends RealmModel> Result<T> createObject(Class<T> type, Object primaryValue) {
@@ -634,7 +667,11 @@ public class RealmHelper {
         }
 
         public void commit() {
-            commitInternal();
+            commitInternal(transaction);
+        }
+
+        public void cancel() {
+            cancelInternal(transaction);
         }
     }
 
@@ -661,7 +698,11 @@ public class RealmHelper {
         }
 
         public void commit() {
-            commitInternal();
+            commitInternal(transaction);
+        }
+
+        public void cancel() {
+            cancelInternal(transaction);
         }
     }
 
@@ -672,7 +713,22 @@ public class RealmHelper {
         }
 
         public void commit() {
-            commitInternal();
+            commitInternal(transaction);
         }
+
+        public void cancel() {
+            cancelInternal(transaction);
+        }
+    }
+
+    public interface OnTransactionListener {
+
+        void onTransactionBegin(Transaction transaction);
+
+        void onTransactionCommit(Transaction transaction);
+
+        void onTransactionCancel(Transaction transaction);
+
+        void onError(Transaction transaction);
     }
 }
