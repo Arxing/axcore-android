@@ -59,8 +59,8 @@ public class SoServer {
     private Action ePing;
     private Action ePingReply;
     private RxInternal rx = new RxInternal();
-    private long pingTimeout = 5000;
-    private long pingInterval = 2000;
+    private long pingTimeout = 30000;
+    private long pingInterval = 5000;
 
     @SuppressWarnings("all")
     public static class Builder {

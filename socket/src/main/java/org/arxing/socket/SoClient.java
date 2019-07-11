@@ -45,8 +45,8 @@ public class SoClient {
     private final static String COMM_NOTIFY_CLOSED = "#comm#@notify_closed";
     private final static String COMM_PING = "#comm#@ping";
     private final static String COMM_PING_REPLY = "#comm#@ping_reply";
-    private long pingTimeout = 5000;
-    private long pingInterval = 2000;
+    private long pingTimeout = 30000;
+    private long pingInterval = 5000;
     private Action eConnecting;
     private Action eConnected;
     private Action eDisconnected;
@@ -313,11 +313,12 @@ public class SoClient {
 
     private void handlePingReply() {
         //若超過時間但還沒被關閉代表遠端timeout
+        rx.unbindAll("timeout");
         rx.bind("timeout",
-                Completable.complete()
-                           .delay(pingTimeout, TimeUnit.MILLISECONDS)
-                           .subscribeOn(Schedulers.newThread())
-                           .subscribe(this::release, this::handleError));
+                Completable.complete().delay(pingTimeout, TimeUnit.MILLISECONDS).subscribeOn(Schedulers.newThread()).subscribe(() -> {
+                    Logger.println("server timeout 即將release");
+                    release();
+                }, this::handleError));
     }
 
     private void handleError(Throwable throwable) {
