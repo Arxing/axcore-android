@@ -114,7 +114,7 @@ public class SoClient {
             return this;
         }
 
-        public Builder ePingReply(Action e) {
+        public Builder onPingReply(Action e) {
             ins.ePingReply = e;
             return this;
         }
