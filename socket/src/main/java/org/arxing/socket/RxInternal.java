@@ -30,11 +30,13 @@ class RxInternal {
     }
 
     public void unbindAll(String name) {
-        for (Disposable disposable : map.get(name)) {
-            if (!disposable.isDisposed())
-                disposable.dispose();
+        if (map.containsKey(name)) {
+            for (Disposable disposable : map.get(name)) {
+                if (!disposable.isDisposed())
+                    disposable.dispose();
+            }
+            map.remove(name);
         }
-        map.remove(name);
     }
 
     public void unbindAll(Class cls) {
