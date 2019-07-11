@@ -4,23 +4,6 @@ import com.annimon.stream.Stream;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-
-import org.arxing.axutils_java.JParser;
-import org.arxing.axutils_java.Logger;
-
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
-import java.net.Socket;
-import java.net.SocketException;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.concurrent.TimeUnit;
-
 import io.reactivex.Completable;
 import io.reactivex.Observable;
 import io.reactivex.ObservableSource;
@@ -31,6 +14,15 @@ import io.reactivex.functions.BiConsumer;
 import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
+import org.arxing.axutils_java.JParser;
+import org.arxing.axutils_java.Logger;
+
+import java.io.*;
+import java.net.Socket;
+import java.net.SocketException;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 public class SoClient {
     private final static String EVENT_CONNECTING = "#event#@connecting";
@@ -38,7 +30,6 @@ public class SoClient {
     private final static String EVENT_DISCONNECTED = "#event#@socket_closed";
     private final static String EVENT_ERROR = "#event#@error";
     private final static String EVENT_MESSAGE = "#event#@message";
-    private final static String EVENT_COMM = "#event#@comm";
     private final static String EVENT_PING = "#event#@ping";
     private final static String EVENT_PING_REPLY = "#event#@ping_reply";
     private final static String COMM_CLIENT_CONNECTED = "#comm#@client_connected";
@@ -52,7 +43,6 @@ public class SoClient {
     private Action eDisconnected;
     private Consumer<Throwable> eError;
     private Consumer<String> eMessage;
-    private BiConsumer<String, String[]> eCommand;
     private Action ePing;
     private Action ePingReply;
 
@@ -65,7 +55,7 @@ public class SoClient {
     private Socket socket;
     private int maxReconnectTries = 50;
     private int reconnectTimes;
-    private Map<String, Consumer<String[]>> commands = new HashMap<>();
+    private Map<String, BiConsumer<String, String[]>> commands = new HashMap<>();
     private RxInternal rx = new RxInternal();
 
     public static class Builder {
@@ -99,11 +89,6 @@ public class SoClient {
             return this;
         }
 
-        public Builder onCommand(BiConsumer<String, String[]> e) {
-            ins.eCommand = e;
-            return this;
-        }
-
         public Builder onDisconnected(Action e) {
             ins.eDisconnected = e;
             return this;
@@ -133,6 +118,11 @@ public class SoClient {
             ins.maxReconnectTries = tries;
             return this;
         }
+
+        public Builder registerComm(String comm, BiConsumer<String, String[]> consumer) {
+            ins.registerCommand(comm, consumer);
+            return this;
+        }
     }
 
     private SoClient(String name) {
@@ -140,7 +130,8 @@ public class SoClient {
         scheduler = Schedulers.newThread();
     }
 
-    @CheckReturnValue public Completable connect(String host, int port) {
+    @CheckReturnValue
+    public Completable connect(String host, int port) {
         return Completable.create(emitter -> {
             emitEvent(EVENT_CONNECTING);
             socket = new Socket(host, port);
@@ -169,7 +160,8 @@ public class SoClient {
         emitEvent(EVENT_DISCONNECTED);
     }
 
-    @CheckReturnValue public Completable sendMessage(String message) {
+    @CheckReturnValue
+    public Completable sendMessage(String message) {
         return Completable.create(emitter -> {
             JsonObject object = new JsonObject();
             object.addProperty("type", "msg");
@@ -182,7 +174,8 @@ public class SoClient {
         }).subscribeOn(scheduler).doOnError(e -> Logger.println("send message error: %s", message));
     }
 
-    @CheckReturnValue public Completable sendCommand(String comm, String... params) {
+    @CheckReturnValue
+    public Completable sendCommand(String comm, String... params) {
         return Completable.create(emitter -> {
             JsonObject object = new JsonObject();
             object.addProperty("type", "comm");
@@ -198,6 +191,16 @@ public class SoClient {
             writer.flush();
             emitter.onComplete();
         }).subscribeOn(scheduler).doOnError(e -> Logger.println("send command error: %s", comm));
+    }
+
+    public void registerCommand(String comm, BiConsumer<String, String[]> runnable) {
+        if (!commands.containsKey(comm))
+            commands.put(comm, runnable);
+    }
+
+    public void unregisterCommand(String comm) {
+        if (commands.containsKey(comm))
+            commands.remove(comm);
     }
 
     private void emitEvent(String event, Object... params) {
@@ -219,9 +222,6 @@ public class SoClient {
                 case EVENT_DISCONNECTED:
                     eDisconnected.run();
                     break;
-                case EVENT_COMM:
-                    eCommand.accept((String) params[0], (String[]) params[1]);
-                    break;
                 case EVENT_PING:
                     ePing.run();
                     break;
@@ -239,8 +239,8 @@ public class SoClient {
         if (handleInternalCommands(command, params))
             return;
         if (commands.containsKey(command)) {
-            Consumer<String[]> runner = commands.get(command);
-            runner.accept(params);
+            BiConsumer<String, String[]> runner = commands.get(command);
+            runner.accept(command, params);
         }
     }
 
@@ -267,9 +267,9 @@ public class SoClient {
                     case "comm":
                         String comm = object.get("comm").getAsString();
                         String[] params = Stream.of(object.get("params").getAsJsonArray())
-                                                .map(JsonElement::getAsString)
-                                                .toList()
-                                                .toArray(new String[0]);
+                                .map(JsonElement::getAsString)
+                                .toList()
+                                .toArray(new String[0]);
                         handleCommand(comm, params);
                         break;
                     case "msg":

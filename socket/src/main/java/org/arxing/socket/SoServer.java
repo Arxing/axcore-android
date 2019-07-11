@@ -4,29 +4,6 @@ import com.annimon.stream.Stream;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-
-import org.arxing.axutils_java.JParser;
-import org.arxing.axutils_java.Logger;
-
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
-import java.net.ServerSocket;
-import java.net.Socket;
-import java.net.SocketException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.TimeUnit;
-
 import io.reactivex.Completable;
 import io.reactivex.Observable;
 import io.reactivex.Scheduler;
@@ -35,6 +12,18 @@ import io.reactivex.functions.Action;
 import io.reactivex.functions.BiConsumer;
 import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
+import org.arxing.axutils_java.JParser;
+import org.arxing.axutils_java.Logger;
+
+import java.io.*;
+import java.net.ServerSocket;
+import java.net.Socket;
+import java.net.SocketException;
+import java.util.Collection;
+import java.util.Map;
+import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.TimeUnit;
 
 public class SoServer {
     private final static String EVENT_ACCEPTING = "#event#@accepting";
@@ -55,7 +44,6 @@ public class SoServer {
     private Consumer<String> eClientDisconnected;
     private Consumer<Throwable> eError;
     private BiConsumer<String, String> eMessage;
-    private BiConsumer<String, String[]> eCommand;
     private Action ePing;
     private Action ePingReply;
     private RxInternal rx = new RxInternal();
@@ -99,11 +87,6 @@ public class SoServer {
             return this;
         }
 
-        public Builder onCommand(BiConsumer<String, String[]> e) {
-            ins.eCommand = e;
-            return this;
-        }
-
         public Builder onPing(Action e) {
             ins.ePing = e;
             return this;
@@ -121,6 +104,11 @@ public class SoServer {
 
         public Builder pingInterval(long mills) {
             ins.pingInterval = mills;
+            return this;
+        }
+
+        public Builder registerComm(String comm, BiConsumer<String, String[]> consumer) {
+            ins.registerCommand(comm, consumer);
             return this;
         }
     }
@@ -175,7 +163,8 @@ public class SoServer {
         /**
          * 對此client發送指令
          */
-        @CheckReturnValue public Completable sendCommand(String comm, String... params) {
+        @CheckReturnValue
+        public Completable sendCommand(String comm, String... params) {
             if (!isConnected)
                 return Completable.never();
             return Completable.create(emitter -> {
@@ -242,9 +231,9 @@ public class SoServer {
                         case "comm":
                             String comm = object.get("comm").getAsString();
                             String[] params = Stream.of(object.get("params").getAsJsonArray())
-                                                    .map(JsonElement::getAsString)
-                                                    .toList()
-                                                    .toArray(new String[0]);
+                                    .map(JsonElement::getAsString)
+                                    .toList()
+                                    .toArray(new String[0]);
                             handleCommand(this, comm, params);
                             break;
                         case "msg":
@@ -279,7 +268,7 @@ public class SoServer {
 
     private Scheduler scheduler;
     private ServerSocket serverSocket;
-    private Map<String, Consumer<String[]>> commands = new ConcurrentHashMap<>();
+    private Map<String, BiConsumer<String, String[]>> commands = new ConcurrentHashMap<>();
     private Map<String, InternalClient> clientMap = new ConcurrentHashMap<>();
 
     private SoServer() {
@@ -329,11 +318,6 @@ public class SoServer {
         }, this::handleError));
     }
 
-    public void registerCommand(String comm, Consumer<String[]> runnable) {
-        if (!commands.containsKey(comm))
-            commands.put(comm, runnable);
-    }
-
     public int getConnectedClients() {
         return clientMap.size();
     }
@@ -366,6 +350,16 @@ public class SoServer {
         }
     }
 
+    public void registerCommand(String comm, BiConsumer<String, String[]> runnable) {
+        if (!commands.containsKey(comm))
+            commands.put(comm, runnable);
+    }
+
+    public void unregisterCommand(String comm) {
+        if (commands.containsKey(comm))
+            commands.remove(comm);
+    }
+
     private InternalClient findClient(String name) {
         return Stream.of(clientMap.values()).filter(o -> name.equals(o.name)).findFirst().orElse(null);
     }
@@ -390,9 +384,6 @@ public class SoServer {
                 case EVENT_MESSAGE:
                     eMessage.accept((String) params[0], (String) params[1]);
                     break;
-                case EVENT_COMM:
-                    eCommand.accept((String) params[0], (String[]) params[1]);
-                    break;
                 case EVENT_PING:
                     ePing.run();
                     break;
@@ -410,10 +401,9 @@ public class SoServer {
         if (handleInternalCommands(client, command, params))
             return;
         if (commands.containsKey(command)) {
-            Consumer<String[]> runner = commands.get(command);
-            List<String> newParams = new ArrayList<>(Arrays.asList(params));
-            newParams.add(0, client.uuid);
-            runner.accept(newParams.toArray(new String[0]));
+            BiConsumer<String, String[]> runner = commands.get(command);
+            runner.accept(command, params);
+            emitEvent(EVENT_COMM, command, params);
         }
     }
 
