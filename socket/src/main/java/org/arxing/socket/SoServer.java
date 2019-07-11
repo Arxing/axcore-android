@@ -137,7 +137,7 @@ public class SoServer {
          */
         public void release() {
             rx.bind(sendCommand(COMM_NOTIFY_CLOSED).doFinally(this::releaseInternal).subscribeOn(scheduler).subscribe(() -> {
-            }, Throwable::printStackTrace));
+            }, this::handleErrorInternal));
         }
 
         /**
@@ -312,7 +312,7 @@ public class SoServer {
                 serverSocket.close();
                 serverSocket = null;
             }
-        }).subscribeOn(scheduler).doOnError(e -> e.printStackTrace()).subscribe(() -> {
+        }).subscribeOn(scheduler).subscribe(() -> {
         }, this::handleError));
     }
 
@@ -383,7 +383,7 @@ public class SoServer {
             }
         } catch (NullPointerException e) {
         } catch (Exception e) {
-            e.printStackTrace();
+            handleError(e);
         }
     }
 
@@ -410,7 +410,8 @@ public class SoServer {
                 emitEvent(EVENT_CLIENT_CONNECTED, client, client.name);
                 return true;
             case COMM_PING:
-                rx.bind(client.sendCommand(COMM_PING_REPLY).subscribe());
+                rx.bind(client.sendCommand(COMM_PING_REPLY).subscribe(() -> {
+                }, this::handleError));
                 return true;
             case COMM_PING_REPLY:
                 client.handlePingReply();

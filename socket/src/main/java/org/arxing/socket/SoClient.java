@@ -139,7 +139,7 @@ public class SoClient {
 
     public void release() {
         rx.bind(sendCommand(COMM_NOTIFY_CLOSED).doFinally(this::releaseInternal).subscribe(() -> {
-        }, Throwable::printStackTrace));
+        }, this::handleError));
     }
 
     private void releaseInternal() throws IOException {
@@ -206,7 +206,7 @@ public class SoClient {
             }
         } catch (NullPointerException e) {
         } catch (Exception e) {
-            e.printStackTrace();
+            handleError(e);
         }
     }
 
