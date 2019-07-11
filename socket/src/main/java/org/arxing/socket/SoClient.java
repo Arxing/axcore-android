@@ -138,10 +138,8 @@ public class SoClient {
     }
 
     public void release() {
-        Logger.println("release...");
         rx.bind(sendCommand(COMM_NOTIFY_CLOSED).doFinally(this::releaseInternal).subscribe(() -> {
-        }, e -> {
-        }));
+        }, Throwable::printStackTrace));
     }
 
     private void releaseInternal() throws IOException {

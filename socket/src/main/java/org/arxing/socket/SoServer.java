@@ -136,8 +136,8 @@ public class SoServer {
          * 釋放單獨一個socket的資源
          */
         public void release() {
-            rx.bind(sendCommand(COMM_NOTIFY_CLOSED).doOnComplete(this::releaseInternal).subscribeOn(scheduler).subscribe(() -> {
-            }, e -> releaseInternal()));
+            rx.bind(sendCommand(COMM_NOTIFY_CLOSED).doFinally(this::releaseInternal).subscribeOn(scheduler).subscribe(() -> {
+            }, Throwable::printStackTrace));
         }
 
         /**
@@ -155,7 +155,7 @@ public class SoServer {
                 writer.write("\n");
                 writer.flush();
                 emitter.onComplete();
-            }).subscribeOn(scheduler);
+            }).subscribeOn(scheduler).doOnError(e -> Logger.println("send message error: %s", message));
         }
 
         /**
@@ -178,7 +178,7 @@ public class SoServer {
                 writer.write("\n");
                 writer.flush();
                 emitter.onComplete();
-            }).subscribeOn(scheduler);
+            }).subscribeOn(scheduler).doOnError(e -> Logger.println("send command error: %s", comm));
         }
 
         public void startPing() {
