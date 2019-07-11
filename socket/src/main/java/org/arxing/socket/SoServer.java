@@ -43,6 +43,8 @@ public class SoServer {
     private final static String EVENT_ERROR = "#event#@error";
     private final static String EVENT_MESSAGE = "#event#@message";
     private final static String EVENT_COMM = "#event#@comm";
+    private final static String EVENT_PING = "#event#@ping";
+    private final static String EVENT_PING_REPLY = "#event#@ping_reply";
     private final static String COMM_CLIENT_CONNECTED = "#comm#@client_connected";
     private final static String COMM_NOTIFY_CLOSED = "#comm#@notify_closed";
     private final static String COMM_PING = "#comm#@ping";
@@ -54,6 +56,8 @@ public class SoServer {
     private Consumer<Throwable> eError;
     private BiConsumer<String, String> eMessage;
     private BiConsumer<String, String[]> eCommand;
+    private Action ePing;
+    private Action ePingReply;
     private RxInternal rx = new RxInternal();
     private long pingTimeout = 5000;
     private long pingInterval = 2000;
@@ -97,6 +101,16 @@ public class SoServer {
 
         public Builder onCommand(BiConsumer<String, String[]> e) {
             ins.eCommand = e;
+            return this;
+        }
+
+        public Builder onPing(Action e) {
+            ins.ePing = e;
+            return this;
+        }
+
+        public Builder ePingReply(Action e) {
+            ins.ePingReply = e;
             return this;
         }
 
@@ -182,15 +196,14 @@ public class SoServer {
         }
 
         public void startPing() {
-            rx.bind("ping",
-                    Observable.interval(pingInterval, TimeUnit.MILLISECONDS)
-                              .subscribeOn(scheduler)
-                              .flatMapCompletable(o -> sendCommand(COMM_PING))
-                              .subscribe(() -> {
-                              }, e -> {
-                                  stopPing();
-                                  handleErrorInternal(e);
-                              }));
+            rx.bind("ping", Observable.interval(pingInterval, TimeUnit.MILLISECONDS).subscribeOn(scheduler).flatMapCompletable(o -> {
+                emitEvent(EVENT_PING);
+                return sendCommand(COMM_PING);
+            }).subscribe(() -> {
+            }, e -> {
+                stopPing();
+                handleErrorInternal(e);
+            }));
         }
 
         public void stopPing() {
@@ -380,6 +393,12 @@ public class SoServer {
                 case EVENT_COMM:
                     eCommand.accept((String) params[0], (String[]) params[1]);
                     break;
+                case EVENT_PING:
+                    ePing.run();
+                    break;
+                case EVENT_PING_REPLY:
+                    ePingReply.run();
+                    break;
             }
         } catch (NullPointerException e) {
         } catch (Exception e) {
@@ -410,6 +429,7 @@ public class SoServer {
                 emitEvent(EVENT_CLIENT_CONNECTED, client, client.name);
                 return true;
             case COMM_PING:
+                emitEvent(EVENT_PING_REPLY);
                 rx.bind(client.sendCommand(COMM_PING_REPLY).subscribe(() -> {
                 }, this::handleError));
                 return true;

@@ -39,6 +39,8 @@ public class SoClient {
     private final static String EVENT_ERROR = "#event#@error";
     private final static String EVENT_MESSAGE = "#event#@message";
     private final static String EVENT_COMM = "#event#@comm";
+    private final static String EVENT_PING = "#event#@ping";
+    private final static String EVENT_PING_REPLY = "#event#@ping_reply";
     private final static String COMM_CLIENT_CONNECTED = "#comm#@client_connected";
     private final static String COMM_NOTIFY_CLOSED = "#comm#@notify_closed";
     private final static String COMM_PING = "#comm#@ping";
@@ -51,6 +53,8 @@ public class SoClient {
     private Consumer<Throwable> eError;
     private Consumer<String> eMessage;
     private BiConsumer<String, String[]> eCommand;
+    private Action ePing;
+    private Action ePingReply;
 
     private Scheduler scheduler;
     private String name;
@@ -59,7 +63,7 @@ public class SoClient {
     private BufferedReader reader;
     private BufferedWriter writer;
     private Socket socket;
-    private int maxReconnectTimes = 50;
+    private int maxReconnectTries = 50;
     private int reconnectTimes;
     private Map<String, Consumer<String[]>> commands = new HashMap<>();
     private RxInternal rx = new RxInternal();
@@ -105,6 +109,16 @@ public class SoClient {
             return this;
         }
 
+        public Builder onPing(Action e) {
+            ins.ePing = e;
+            return this;
+        }
+
+        public Builder ePingReply(Action e) {
+            ins.ePingReply = e;
+            return this;
+        }
+
         public Builder pingTimeout(long mills) {
             ins.pingTimeout = mills;
             return this;
@@ -112,6 +126,11 @@ public class SoClient {
 
         public Builder pingInterval(long mills) {
             ins.pingInterval = mills;
+            return this;
+        }
+
+        public Builder maxReconnectTries(int tries) {
+            ins.maxReconnectTries = tries;
             return this;
         }
     }
@@ -130,7 +149,7 @@ public class SoClient {
             startReceivingData();
             rx.bind(sendCommand(COMM_CLIENT_CONNECTED, name).subscribe(() -> emitEvent(EVENT_CONNECTED)));
         }).toObservable().retryWhen(observable -> observable.flatMap((Function<Throwable, ObservableSource<?>>) throwable -> {
-            if (++reconnectTimes <= maxReconnectTimes)
+            if (++reconnectTimes <= maxReconnectTries)
                 return Observable.timer(5000, TimeUnit.MILLISECONDS);
             else
                 return Observable.error(throwable);
@@ -203,6 +222,12 @@ public class SoClient {
                 case EVENT_COMM:
                     eCommand.accept((String) params[0], (String[]) params[1]);
                     break;
+                case EVENT_PING:
+                    ePing.run();
+                    break;
+                case EVENT_PING_REPLY:
+                    ePingReply.run();
+                    break;
             }
         } catch (NullPointerException e) {
         } catch (Exception e) {
@@ -258,15 +283,14 @@ public class SoClient {
     }
 
     private void startPing() {
-        rx.bind("ping",
-                Observable.interval(pingInterval, TimeUnit.MILLISECONDS)
-                          .subscribeOn(scheduler)
-                          .flatMapCompletable(o -> sendCommand(COMM_PING))
-                          .subscribe(() -> {
-                          }, e -> {
-                              stopPing();
-                              handleError(e);
-                          }));
+        rx.bind("ping", Observable.interval(pingInterval, TimeUnit.MILLISECONDS).subscribeOn(scheduler).flatMapCompletable(o -> {
+            emitEvent(EVENT_PING);
+            return sendCommand(COMM_PING);
+        }).subscribe(() -> {
+        }, e -> {
+            stopPing();
+            handleError(e);
+        }));
     }
 
     private void stopPing() {
@@ -276,6 +300,7 @@ public class SoClient {
     private boolean handleInternalCommands(String command, String... params) {
         switch (command) {
             case COMM_PING:
+                emitEvent(EVENT_PING_REPLY);
                 rx.bind(sendCommand(COMM_PING_REPLY).subscribe(() -> {
                 }, this::handleError));
                 return true;
