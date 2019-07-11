@@ -140,7 +140,7 @@ public class SoClient {
         scheduler = Schedulers.newThread();
     }
 
-    @CheckReturnValue public Completable connect(String host, int port) throws Exception {
+    @CheckReturnValue public Completable connect(String host, int port) {
         return Completable.create(emitter -> {
             emitEvent(EVENT_CONNECTING);
             socket = new Socket(host, port);

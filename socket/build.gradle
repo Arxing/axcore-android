@@ -15,7 +15,7 @@ if (plugins.hasPlugin('mvnpush')) {
         POM_NAME = "socket"
         POM_ARTIFACT_ID = "socket"
         POM_PACKAGING = "jar"
-        VERSION_NAME = "1.0.6"
+        VERSION_NAME = "1.0.7"
         VERSION_CODE = "1"
         GROUP = "org.arxing"
         POM_DESCRIPTION = ""
