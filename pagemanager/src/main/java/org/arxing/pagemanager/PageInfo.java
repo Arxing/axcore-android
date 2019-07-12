@@ -97,7 +97,7 @@ public class PageInfo<T extends Fragment & IPageFragment> {
         /**
          * 設置頁面class
          */
-        public Builder setFragmentClass(Class<? extends PageFragment> fragmentClass) {
+        public Builder setFragmentClass(Class<? extends Fragment> fragmentClass) {
             ins.fragmentClass = fragmentClass;
             return this;
         }
